@@ -1,0 +1,133 @@
+plugins:
+
+  yunlet:
+    executor: central_deployment_agent
+    source: https://github.com/danieldin95/cloudify-yunlet-plugin/archive/0.0.1.zip
+    package_name: cloudify-yunlet-plugin
+    package_version: '0.0.1'
+
+data_types:
+
+  cloudify.datatypes.yunlet.Config:
+    properties:
+      username:
+        description: >
+          Yunlet username.
+        type: string
+        required: false
+      host:
+        description: >
+          Yunlet hostname or IP address.
+        type: string
+        required: false
+      password:
+        description: >
+          Yunlet password.
+        type: string
+        required: false
+      port:
+        description: >
+          Yunlet port for xmlrpc.
+        type: integer
+        required: false
+
+ cloudify.datatypes.yunlet.ServerProperties:
+    properties:
+      memory:
+        description: >
+          Amount of RAM, in MB.
+        type: integer
+        required: false
+      cpus:
+        description: >
+          Number of CPUs.
+        type: integer
+        required: false
+      template:
+        description: >
+          Virtual machine template from which server will be spawned.
+          See full documentation at docs.getcloudify.org for requirements.
+        type: string
+        required: false
+      name:
+        description: >
+          Server name.
+          Will use node name if this is not set.
+          Must consist of only ASCII letters, numbers, and hyphens.
+          Will automatically convert underscores to hyphens.
+        type: string
+        required: false
+
+node_types:
+
+  cloudify.yunlet.nodes.Server:
+    derived_from: cloudify.nodes.Compute
+    properties:
+      server:
+        type: cloudify.datatypes.yunlet.ServerProperties
+      connection_config:
+        type: cloudify.datatypes.yunlet.Config
+
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          implementation: yunlet.cloudify_yunlet.server.start
+          inputs: {}
+        stop:
+          implementation: yunlet.cloudify_yunlet.server.stop
+          inputs: {}
+        shutdown_guest:
+          implementation: yunlet.cloudify_yunlet.server.shutdown_guest
+          inputs: {}
+        delete:
+          implementation: yunlet.cloudify_yunlet.server.delete
+          inputs: {}
+      # suspend/resume
+      cloudify.interfaces.freeze:
+        suspend:
+          implementation: yunlet.cloudify_yunlet.server.freeze_suspend
+          inputs: {}
+        resume:
+          implementation: yunlet.cloudify_yunlet.server.freeze_resume
+          inputs: {}
+      # backups related section
+      cloudify.interfaces.snapshot:
+        create:
+          implementation: yunlet.cloudify_yunlet.server.snapshot_create
+          inputs: {}
+        apply:
+          implementation: yunlet.cloudify_yunlet.server.snapshot_apply
+          inputs: {}
+        delete:
+          implementation: yunlet.cloudify_yunlet.server.snapshot_delete
+          inputs: {}
+      cloudify.interfaces.host:
+        get_state:
+          implementation: yunlet.cloudify_yunlet.server.get_state
+          inputs: {}
+      cloudify.interfaces.modify:
+        resize:
+          implementation: yunlet.cloudify_yunlet.server.resize_server
+      cloudify.interfaces.power:
+        'on':
+          implementation: yunlet.cloudify_yunlet.power.power_on
+        'off':
+          implementation: yunlet.cloudify_yunlet.power.power_off
+        reset:
+          implementation: yunlet.cloudify_yunlet.power.reset
+        reboot:
+          implementation: yunlet.cloudify_yunlet.power.reboot
+          inputs:
+            max_wait_time:
+              type: integer
+              default: 300
+              description: >
+                How long to wait for the operation to complete.
+        shut_down:
+          implementation: yunlet.cloudify_yunlet.power.shut_down
+          inputs:
+            max_wait_time:
+              type: integer
+              default: 300
+              description: >
+                How long to wait for the operation to complete.
