@@ -22,6 +22,6 @@ setup(
     license='LICENSE',
     packages=['cloudify_yunlet'],
     install_requires=[
-        'cloudify-plugins-common>=3.3',
+        'cloudify-plugins-common>=3.4',
     ]
 )
