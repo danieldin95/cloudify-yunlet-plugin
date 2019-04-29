@@ -18,7 +18,6 @@ create
             "password": "admin",
             "role": "default",
             "authtype": "default",
-            "cred_type": "default",
             "save": true
           }
       },  
