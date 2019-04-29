@@ -1,3 +1,5 @@
+create
+-------
 {
   "name": "daniel",
   "type": "ManageIQ::Providers::Openstack::CloudManager",
@@ -16,7 +18,8 @@
             "password": "admin",
             "role": "default",
             "authtype": "default",
-            "cred_type": "default"
+            "cred_type": "default",
+            "save": true
           }
       },  
       {
@@ -27,6 +30,7 @@
   ]
 }
 
+refresh
 -------
 {
     "action": "refresh"
