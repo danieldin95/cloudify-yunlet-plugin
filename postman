@@ -16,9 +16,6 @@ create
           "authentication": {
             "userid": "admin",
             "password": "admin",
-            "role": "default",
-            "authtype": "default",
-            "save": true
           }
       },  
       {
