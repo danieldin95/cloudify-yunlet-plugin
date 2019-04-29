@@ -1,0 +1,33 @@
+{
+  "name": "daniel",
+  "type": "ManageIQ::Providers::Openstack::CloudManager",
+  "api_version": "v3",
+  "keystone_v3_domain_id": "default",
+  "connection_configurations": [
+      {
+          "endpoint": {
+             "role": "default",
+             "hostname": "192.168.4.147",
+             "port": "5000",
+             "security_protocol": "non-ssl"
+          },
+          "authentication": {
+            "userid": "admin",
+            "password": "admin",
+            "role": "default",
+            "authtype": "default",
+            "cred_type": "default"
+          }
+      },  
+      {
+          "endpoint": {
+             "role": "ceilometer"
+          }
+      }      
+  ]
+}
+
+-------
+{
+    "action": "refresh"
+}
